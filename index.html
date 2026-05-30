@@ -208,6 +208,15 @@
               <span class="score-item__lbl">Clarity</span>
             </div>
           </div>
+          <div style="display: flex; gap: 8px; margin-top: 15px;">
+            <button class="btn btn--primary" id="viewReportBtn" style="flex: 1;" onclick="openAtsModal()">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="margin-right:4px;"><path d="M2 14h12M4 11V5a2 2 0 014 0v6M8 8h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              View Report
+            </button>
+            <button class="btn btn--ghost" id="clearResumeBtn" style="padding: 8px 12px;" onclick="resetResume()" title="Upload new resume">
+              Clear
+            </button>
+          </div>
         </div>
       </article>
 
@@ -407,6 +416,18 @@
       <p class="footer__copy">Built to help you land your dream job &mdash; <span id="footerYear"></span></p>
     </div>
   </footer>
+
+  <!-- ATS Feedback Modal -->
+  <div class="modal" id="atsModal" hidden>
+    <div class="modal__overlay" onclick="closeAtsModal()"></div>
+    <div class="modal__content">
+      <button class="modal__close" onclick="closeAtsModal()" aria-label="Close modal">&times;</button>
+      <h3 class="modal__title">ATS Parsing & Diagnostic Report</h3>
+      <div class="modal__body" id="atsReportBody">
+        <!-- Content injected dynamically -->
+      </div>
+    </div>
+  </div>
 
   <!-- Firebase SDK Compat -->
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>

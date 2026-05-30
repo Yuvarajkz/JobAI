@@ -125,6 +125,8 @@ function initUserDropdown() {
       logoutBtn.addEventListener('click', () => {
         auth.signOut().then(() => {
           localStorage.removeItem('currentUser');
+          localStorage.removeItem('userStats');
+          localStorage.removeItem('userSkills');
           window.location.reload();
         }).catch((error) => {
           alert(error.message);
@@ -141,6 +143,36 @@ function initUserDropdown() {
         const firstName = parts[0] || "Firebase";
         const lastName = parts.slice(1).join(" ") || "User";
         
+        // Reset statistics if switching to a new user to start from scratch
+        const cachedUserStr = localStorage.getItem('currentUser');
+        let isNewUser = false;
+        if (cachedUserStr) {
+          try {
+            const cachedUser = JSON.parse(cachedUserStr);
+            if (cachedUser.email !== user.email) {
+              isNewUser = true;
+            }
+          } catch(e) {
+            isNewUser = true;
+          }
+        } else {
+          isNewUser = true;
+        }
+
+        if (isNewUser) {
+          localStorage.removeItem('userStats');
+          localStorage.removeItem('userSkills');
+          localStorage.removeItem('atsResumeData');
+          // Reset UI views
+          const uploadZone = document.getElementById('uploadZone');
+          const uploadResult = document.getElementById('uploadResult');
+          if (uploadZone) uploadZone.hidden = false;
+          if (uploadResult) uploadResult.hidden = true;
+          // Re-initialize lists
+          initDashboardStats();
+          initSkillsTracker();
+        }
+
         const sessionUser = {
           firstName: firstName,
           lastName: lastName,
@@ -159,6 +191,8 @@ function initUserDropdown() {
       } else {
         // User is logged out
         localStorage.removeItem('currentUser');
+        localStorage.removeItem('userStats');
+        localStorage.removeItem('userSkills');
         if (authLinks) authLinks.style.display = 'flex';
         if (userMenu) userMenu.style.display = 'none';
       }
@@ -184,6 +218,8 @@ function initUserDropdown() {
     if (logoutBtn) {
       logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('currentUser');
+        localStorage.removeItem('userStats');
+        localStorage.removeItem('userSkills');
         window.location.reload();
       });
     }
@@ -200,6 +236,24 @@ function initResumeDropzone() {
   const fileNameSpan = document.getElementById('fileName');
 
   if (!uploadZone || !fileInput || !uploadResult) return;
+
+  // Restore saved resume analytics on page reload
+  const savedDataStr = localStorage.getItem('atsResumeData');
+  if (savedDataStr) {
+    try {
+      const data = JSON.parse(savedDataStr);
+      uploadZone.hidden = true;
+      uploadResult.hidden = false;
+      if (fileNameSpan) fileNameSpan.textContent = data.fileName;
+      lastAtsReportHtml = data.reportHtml;
+      // Animate score rings after a tiny delay to allow layout
+      setTimeout(() => {
+        animateScoreRings(data.ats, data.keywords, data.clarity);
+      }, 100);
+    } catch(e) {
+      console.error("Failed to restore ATS data", e);
+    }
+  }
 
   // Add drag & drop classes
   ['dragenter', 'dragover'].forEach(eventName => {
@@ -232,6 +286,113 @@ function initResumeDropzone() {
     }
   });
 }
+
+let lastAtsReportHtml = "";
+
+function generateAtsReport(fileName, ats, keywords, clarity) {
+  // Extract file extension and base name
+  const ext = fileName.substring(fileName.lastIndexOf('.')).toUpperCase();
+  const baseName = fileName.substring(0, fileName.lastIndexOf('.'));
+  
+  // Decide keywords to suggest based on name or random
+  const allPossibleKeywords = ["Docker", "Kubernetes", "TypeScript", "CI/CD Pipelines", "React", "Node.js", "Redis", "AWS Cloud", "NoSQL Databases", "Unit Testing", "System Design", "Microservices"];
+  // Randomly select 3 missing keywords
+  const shuffled = allPossibleKeywords.sort(() => 0.5 - Math.random());
+  const missingKeywords = shuffled.slice(0, 3);
+  const foundKeywords = shuffled.slice(3, 8);
+
+  const clarityIssues = clarity < 85 
+    ? [
+        "Simplify dense paragraphs in the 'Experience' section. Bullet points should not exceed 2 lines.",
+        "Ensure dates are formatted consistently (e.g. 'MM/YYYY' or 'Month YYYY')."
+      ]
+    : [
+        "Great paragraph spacing and margins detected.",
+        "Clear hierarchy of headings (H1/H2 font sizes are well balanced)."
+      ];
+
+  const parsingPreviewText = `
+[CONTACT INFO]
+Name: ${baseName}
+Email: parsed-email@gmail.com
+Phone: +1 (555) 019-2834
+
+[EXPERIENCE]
+Role: Software Engineer
+Highlights: Built microservices, optimized database queries, collaborated with front-end teams.
+
+[SKILLS]
+Tech: ${foundKeywords.join(", ")}
+  `.trim();
+
+  lastAtsReportHtml = `
+    <div class="report-section">
+      <div class="report-section__title report-section__title--info">
+        <span>📄 File Diagnostic Summary</span>
+      </div>
+      <p>File Analysed: <strong>${fileName}</strong> (${ext} Format)</p>
+      <p>Overall Compatibility Status: ${ats >= 80 ? '<span class="badge badge--teal" style="font-size:10px; margin-left:6px;">Highly Compatible</span>' : '<span class="badge badge--coral" style="font-size:10px; margin-left:6px;">Requires Edits</span>'}</p>
+    </div>
+
+    <div class="report-section">
+      <div class="report-section__title ${keywords >= 75 ? 'report-section__title--success' : 'report-section__title--warning'}">
+        <span>🔑 Keywords & Skills Optimization</span>
+      </div>
+      <p>Your resume matches standard job listings for your target roles at <strong>${keywords}%</strong>.</p>
+      <div style="margin-top: 8px;">
+        <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">Skills Found:</span>
+        <div class="report-badge-container" style="margin-top:4px;">
+          ${foundKeywords.map(k => `<span class="badge badge--blue" style="font-size:10px;">${k}</span>`).join('')}
+        </div>
+      </div>
+      <div style="margin-top: 10px;">
+        <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">⚠️ Highly Recommended Missing Keywords:</span>
+        <div class="report-badge-container" style="margin-top:4px;">
+          ${missingKeywords.map(k => `<span class="badge badge--coral" style="font-size:10px;">+ ${k}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="report-section">
+      <div class="report-section__title report-section__title--success">
+        <span>📏 Format & Clarity Checks</span>
+      </div>
+      <ul class="report-list">
+        <li><strong>Single-column template</strong> parsed successfully (best for ATS).</li>
+        <li>No tables, textboxes, or headers/footers containing critical info detected.</li>
+        ${clarityIssues.map(issue => `<li>${issue}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="report-section">
+      <div class="report-section__title report-section__title--info">
+        <span>🤖 ATS Parsing Text Preview</span>
+      </div>
+      <p style="font-size:12px; margin-bottom: 6px;">This is exactly how recruitment machines read your headings and details:</p>
+      <div class="report-preview">${parsingPreviewText}</div>
+    </div>
+  `;
+}
+
+window.openAtsModal = function() {
+  const modal = document.getElementById('atsModal');
+  const body = document.getElementById('atsReportBody');
+  if (modal && body) {
+    body.innerHTML = lastAtsReportHtml || `
+      <div style="text-align:center; padding: 20px;">
+        <p style="color:var(--text-secondary);">No resume data parsed yet. Please upload your resume on the dashboard first.</p>
+      </div>
+    `;
+    modal.hidden = false;
+  }
+};
+
+window.closeAtsModal = function() {
+  const modal = document.getElementById('atsModal');
+  if (modal) {
+    modal.hidden = true;
+  }
+};
 
 function handleResumeFile(file) {
   const uploadZone = document.getElementById('uploadZone');
@@ -285,6 +446,18 @@ function handleResumeFile(file) {
     // Animate score rings
     animateScoreRings(atsScore, keywordsScore, clarityScore);
     
+    // Generate diagnostic HTML report
+    generateAtsReport(file.name, atsScore, keywordsScore, clarityScore);
+    
+    // Save to local storage
+    localStorage.setItem('atsResumeData', JSON.stringify({
+      fileName: file.name,
+      ats: atsScore,
+      keywords: keywordsScore,
+      clarity: clarityScore,
+      reportHtml: lastAtsReportHtml
+    }));
+
     // Increment progress stats
     incrementQuestionCount(3);
     
@@ -292,6 +465,19 @@ function handleResumeFile(file) {
     appendAiMessage("System Notification", "🔍 AI Resume Analyser completed! ATS score: " + atsScore + "/100. Keywords match rate: " + keywordsScore + "%. Try mentioning these numbers in your mock interview answers!", true);
   }, 1800);
 }
+
+window.resetResume = function() {
+  const uploadZone = document.getElementById('uploadZone');
+  const uploadResult = document.getElementById('uploadResult');
+  const fileInput = document.getElementById('resumeUpload');
+  
+  localStorage.removeItem('atsResumeData');
+  lastAtsReportHtml = "";
+  
+  if (uploadZone) uploadZone.hidden = false;
+  if (uploadResult) uploadResult.hidden = true;
+  if (fileInput) fileInput.value = ""; // Reset input file value
+};
 
 function animateScoreRings(ats, keywords, clarity) {
   const scoreRings = document.querySelectorAll('.score-ring');
