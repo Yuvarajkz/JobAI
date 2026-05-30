@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your AI-Powered Career Command Centre</title>
+<link rel="stylesheet" href="practice-style.css" />
+<link rel="stylesheet" href="exam.css" />
+</head>
+<body>
+<div class="grain"></div>
+<div class="bg-canvas">
+  <div class="bg-orb bg-orb--1"></div>
+  <div class="bg-orb bg-orb--2"></div>
+  <div class="bg-orb bg-orb--3"></div>
+  <div class="bg-grid"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar__brand">
+    <span class="navbar__logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="8" fill="currentColor" opacity=".12"/>
+        <path d="M7 14L12 19L21 9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span class="navbar__wordmark">Career <em>Command</em> Centre</span>
+  </div>
+  <div class="navbar__links">
+    <a href="index.html" class="nav-pill">Dashboard Home</a>
+    <a href="practice.html" class="nav-pill nav-pill--active">Dashboard</a>
+    <a href="practice-admin.html" class="nav-pill">Admin Panel</a>
+    <a href="#subjects" class="nav-pill">Subjects</a>
+  </div>
+  <div class="navbar__actions">
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span class="theme-toggle__track">
+        <span class="theme-toggle__thumb">
+          <svg class="icon-sun" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/></svg>
+          <svg class="icon-moon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </span>
+      </span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow-chip"><span class="eyebrow-chip__dot"></span>AI-Powered Examination Platform</div>
+  <h1 class="hero__title">Your <em>Career Command</em> Centre</h1>
+  <p class="hero__sub">Conduct professional exams, share links with students, track results — all in one beautifully designed platform.</p>
+  <div class="hero__proof">
+    <div class="proof-item"><strong id="totalExams">0</strong><span>Exams Created</span></div>
+    <div class="proof-sep"></div>
+    <div class="proof-item"><strong id="totalAttempts">0</strong><span>Attempts</span></div>
+    <div class="proof-sep"></div>
+    <div class="proof-item"><strong id="totalSubjects">4</strong><span>Subjects</span></div>
+  </div>
+</section>
+
+<!-- SUBJECT CARDS -->
+<section id="subjects" style="position:relative;z-index:1;padding:0 clamp(1rem,4vw,2.5rem) 3rem;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+    <div>
+      <h2 style="font-family:var(--font-display);font-size:1.4rem;font-weight:800;letter-spacing:-.02em;">Available Subjects</h2>
+      <p style="font-size:13px;color:var(--text-tertiary);margin-top:2px;">Select a subject to manage or start exams</p>
+    </div>
+    <a href="practice-admin.html" class="btn btn--primary">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Subject / Questions
+    </a>
+  </div>
+  <div id="subjectGrid" class="subject-grid"></div>
+</section>
+
+<!-- RECENT EXAMS TABLE -->
+<section style="position:relative;z-index:1;padding:0 clamp(1rem,4vw,2.5rem) 3rem;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+    <h2 style="font-family:var(--font-display);font-size:1.4rem;font-weight:800;letter-spacing:-.02em;">Recent Exam Links</h2>
+    <span class="badge badge--blue" id="examCount">0 exams</span>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div id="examTableWrap">
+      <div style="padding:3rem;text-align:center;color:var(--text-tertiary);">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 1rem;opacity:.4"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+        <p style="font-size:14px;">No exams created yet. Go to <a href="practice-admin.html" style="color:var(--accent-blue);font-weight:600;">Admin Panel</a> to create one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCORES MODAL -->
+<div id="scoresModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);overflow-y:auto;padding:2rem 1rem;">
+  <div style="max-width:780px;margin:auto;background:var(--surface,#fff);border-radius:20px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.25);">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:1.4rem 1.8rem;border-bottom:1px solid var(--border,#e5e7eb);">
+      <h2 id="modalTitle" style="font-size:1.15rem;font-weight:800;font-family:var(--font-display,sans-serif);">Exam Scores</h2>
+      <button onclick="closeModal()" style="border:none;background:none;cursor:pointer;font-size:1.4rem;line-height:1;color:var(--text-secondary,#666);">✕</button>
+    </div>
+    <div id="modalBody" style="padding:1.8rem;"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <svg width="16" height="16" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="var(--accent-blue)" opacity=".15"/><path d="M7 14L12 19L21 9" stroke="var(--accent-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Career Command Centre
+    </div>
+    <span class="footer__copy">© 2025 · AI-Powered Exam Platform</span>
+  </div>
+</footer>
+
+<script src="practice-data.js"></script>
+<script src="practice-app.js"></script>
+<script src="practice-admin.js"></script>
+
+<style>
+/* ── Exam Table ─────────────────────────────── */
+.exam-table { width:100%; border-collapse:collapse; font-size:13.5px; }
+.exam-table th {
+  background:var(--surface-2,#f9fafb);
+  color:var(--text-tertiary,#6b7280);
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  font-size:11px;
+  padding:.75rem 1.1rem;
+  text-align:left;
+  border-bottom:1px solid var(--border,#e5e7eb);
+}
+.exam-table td {
+  padding:.9rem 1.1rem;
+  border-bottom:1px solid var(--border,#e5e7eb);
+  vertical-align:middle;
+  color:var(--text-primary,#111827);
+}
+.exam-table tr:last-child td { border-bottom:none; }
+.exam-table tr:hover td { background:var(--surface-2,#f9fafb); }
+
+.action-btn {
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem;
+  padding:.38rem .75rem;
+  border-radius:8px;
+  border:1.5px solid transparent;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  text-decoration:none;
+  transition:all .15s;
+  white-space:nowrap;
+}
+.action-btn--open   { background:#eff6ff;color:#2563eb;border-color:#bfdbfe; }
+.action-btn--open:hover   { background:#2563eb;color:#fff; }
+.action-btn--score  { background:#f0fdf4;color:#16a34a;border-color:#bbf7d0; }
+.action-btn--score:hover  { background:#16a34a;color:#fff; }
+.action-btn--dlq    { background:#fefce8;color:#ca8a04;border-color:#fde68a; }
+.action-btn--dlq:hover    { background:#ca8a04;color:#fff; }
+.action-btn--dlw    { background:#fdf4ff;color:#9333ea;border-color:#e9d5ff; }
+.action-btn--dlw:hover    { background:#9333ea;color:#fff; }
+
+.actions-cell { display:flex;flex-wrap:wrap;gap:.4rem; }
+
+/* Scores table inside modal */
+.scores-table { width:100%;border-collapse:collapse;font-size:13px; }
+.scores-table th { background:#f9fafb;padding:.6rem .9rem;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;border-bottom:1px solid #e5e7eb; }
+.scores-table td { padding:.7rem .9rem;border-bottom:1px solid #f3f4f6; }
+.scores-table tr:last-child td { border-bottom:none; }
+.score-badge { display:inline-block;padding:.2rem .55rem;border-radius:6px;font-weight:800;font-size:12px; }
+.score-badge--high  { background:#dcfce7;color:#15803d; }
+.score-badge--mid   { background:#fef9c3;color:#a16207; }
+.score-badge--low   { background:#fee2e2;color:#b91c1c; }
+</style>
+
+<script>
+/* ── Theme ───────────────────────────────────── */
+function toggleTheme() {
+  const html = document.documentElement;
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', html.dataset.theme);
+}
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+
+/* ── Render Recent Exam Links Table ──────────── */
+function renderExamTable() {
+  const wrap = document.getElementById('examTableWrap');
+  const countBadge = document.getElementById('examCount');
+
+  // DB guard — data.js must define window.DB
+  if (typeof DB === 'undefined') return;
+
+  const exams = DB.getExams ? DB.getExams() : [];
+  if (!exams || exams.length === 0) return; // keep placeholder
+
+  countBadge.textContent = exams.length + (exams.length === 1 ? ' exam' : ' exams');
+
+  // Update hero stats
+  const totalAttempts = exams.reduce((acc, e) => {
+    const results = DB.getResults ? DB.getResults().filter(r => String(r.examId) === String(e.id)) : [];
+    return acc + results.length;
+  }, 0);
+  const el = document.getElementById('totalAttempts');
+  if (el) el.textContent = totalAttempts;
+  const elExams = document.getElementById('totalExams');
+  if (elExams) elExams.textContent = exams.length;
+
+  const rows = exams.map(exam => {
+    const examUrl = `practice-exam.html?id=${exam.id}`;
+    const subject = DB.getSubjects ? DB.getSubjects().find(s => String(s.id) === String(exam.subjectId)) : null;
+    const subjectName = subject ? subject.name : ('Subject #' + exam.subjectId);
+    const results = DB.getResults ? DB.getResults().filter(r => String(r.examId) === String(exam.id)) : [];
+    const attempts = results.length;
+    const createdAt = exam.createdAt ? new Date(exam.createdAt).toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'}) : '—';
+
+    return `
+      <tr>
+        <td style="font-weight:700;">${escHtml(exam.title)}</td>
+        <td>${escHtml(subjectName)}</td>
+        <td>${exam.duration ? exam.duration + ' min' : '—'}</td>
+        <td>${createdAt}</td>
+        <td><span style="font-weight:700;">${attempts}</span></td>
+        <td>
+          <div class="actions-cell">
+            <a href="${examUrl}" target="_blank" class="action-btn action-btn--open">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Open Exam
+            </a>
+            <button onclick="viewScores('${exam.id}')" class="action-btn action-btn--score">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+              Scores
+            </button>
+            <button onclick="downloadQuestions('${exam.id}')" class="action-btn action-btn--dlq">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Questions
+            </button>
+            <button onclick="downloadWritten('${exam.id}')" class="action-btn action-btn--dlw">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Written
+            </button>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <div style="overflow-x:auto;">
+      <table class="exam-table">
+        <thead>
+          <tr>
+            <th>Exam Title</th>
+            <th>Subject</th>
+            <th>Duration</th>
+            <th>Created</th>
+            <th>Attempts</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+/* ── View Scores Modal ───────────────────────── */
+function viewScores(examId) {
+  const exam = DB.getExamById ? DB.getExamById(examId) : null;
+  const results = DB.getResults ? DB.getResults().filter(r => String(r.examId) === String(examId)) : [];
+  const title = exam ? exam.title : 'Exam';
+
+  document.getElementById('modalTitle').textContent = '📊 Scores — ' + title;
+
+  if (!results.length) {
+    document.getElementById('modalBody').innerHTML = `
+      <div style="text-align:center;padding:2rem;color:#9ca3af;">
+        <p style="font-size:14px;">No attempts yet for this exam.</p>
+      </div>`;
+  } else {
+    const avgScore = Math.round(results.reduce((a,r) => a + (r.score||0), 0) / results.length);
+    const rows = results.map((r, i) => {
+      const cls = r.score >= 75 ? 'score-badge--high' : r.score >= 50 ? 'score-badge--mid' : 'score-badge--low';
+      const date = r.submittedAt ? new Date(r.submittedAt).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+      return `
+        <tr>
+          <td style="font-weight:600;">${i+1}. ${escHtml(r.studentName || 'Anonymous')}</td>
+          <td><span class="score-badge ${cls}">${r.score ?? '—'}%</span></td>
+          <td>${r.correctAnswers ?? '—'} / ${(r.correctAnswers||0)+(r.wrongAnswers||0)}</td>
+          <td>${r.earnedMarks ?? '—'} / ${r.totalMarks ?? '—'}</td>
+          <td style="color:#6b7280;font-size:12px;">${date}</td>
+        </tr>`;
+    }).join('');
+
+    document.getElementById('modalBody').innerHTML = `
+      <div style="display:flex;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap;">
+        <div style="flex:1;min-width:120px;background:#f9fafb;border-radius:12px;padding:1rem;text-align:center;">
+          <div style="font-size:1.6rem;font-weight:900;color:#2563eb;">${results.length}</div>
+          <div style="font-size:12px;color:#6b7280;font-weight:600;">Attempts</div>
+        </div>
+        <div style="flex:1;min-width:120px;background:#f9fafb;border-radius:12px;padding:1rem;text-align:center;">
+          <div style="font-size:1.6rem;font-weight:900;color:#16a34a;">${avgScore}%</div>
+          <div style="font-size:12px;color:#6b7280;font-weight:600;">Avg Score</div>
+        </div>
+        <div style="flex:1;min-width:120px;background:#f9fafb;border-radius:12px;padding:1rem;text-align:center;">
+          <div style="font-size:1.6rem;font-weight:900;color:#9333ea;">${Math.max(...results.map(r=>r.score||0))}%</div>
+          <div style="font-size:12px;color:#6b7280;font-weight:600;">Top Score</div>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="scores-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Score</th>
+              <th>Correct / Total</th>
+              <th>Marks</th>
+              <th>Submitted</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      <div style="margin-top:1rem;text-align:right;">
+        <button onclick="downloadScoresCSV('${examId}')" class="action-btn action-btn--score" style="font-size:13px;padding:.5rem 1rem;">
+          ⬇ Export CSV
+        </button>
+      </div>`;
+  }
+
+  document.getElementById('scoresModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('scoresModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Close modal on backdrop click
+document.getElementById('scoresModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+/* ── Download Questions ──────────────────────── */
+function downloadQuestions(examId) {
+  const exam = DB.getExamById ? DB.getExamById(examId) : null;
+  if (!exam) return alert('Exam not found.');
+
+  const questions = DB.getQuestions ? DB.getQuestions().filter(q => String(q.subjectId) === String(exam.subjectId)) : [];
+  if (!questions.length) return alert('No questions found for this exam.');
+
+  let txt = '='.repeat(60) + '\n';
+  txt += 'EXAM: ' + (exam.title || 'Untitled') + '\n';
+  txt += 'Duration: ' + (exam.duration || '—') + ' minutes\n';
+  txt += 'Instructions: ' + (exam.instructions || 'Answer all questions.') + '\n';
+  txt += '='.repeat(60) + '\n\n';
+
+  const secA = questions.filter(q => q.section === 'A');
+  const secB = questions.filter(q => q.section !== 'A');
+
+  if (secA.length) {
+    txt += 'SECTION A — Multiple Choice (' + secA.length + ' questions)\n';
+    txt += '-'.repeat(40) + '\n\n';
+    secA.forEach((q, i) => {
+      txt += `Q${i+1}. ${q.text}\n`;
+      if (q.options) q.options.forEach((opt, idx) => { txt += `   ${String.fromCharCode(65+idx)}) ${opt}\n`; });
+      txt += '\n';
+    });
+  }
+
+  if (secB.length) {
+    txt += '\nSECTION B — Written / Descriptive (' + secB.length + ' questions)\n';
+    txt += '-'.repeat(40) + '\n\n';
+    secB.forEach((q, i) => {
+      txt += `Q${i+1}. ${q.text}  [${q.marks || 1} mark${q.marks!==1?'s':''}]\n\n`;
+    });
+  }
+
+  txt += '\n' + '='.repeat(60) + '\n';
+  txt += 'Generated by Career Command Centre\n';
+
+  downloadFile(
+    txt,
+    'questions_' + slugify(exam.title) + '.txt',
+    'text/plain'
+  );
+}
+
+/* ── Download Written Answers ────────────────── */
+function downloadWritten(examId) {
+  const exam = DB.getExamById ? DB.getExamById(examId) : null;
+  if (!exam) return alert('Exam not found.');
+
+  const allResults = DB.getResults ? DB.getResults().filter(r => String(r.examId) === String(examId)) : [];
+  const questions  = DB.getQuestions ? DB.getQuestions().filter(q => String(q.subjectId) === String(exam.subjectId)) : [];
+  const writtenQs  = questions.filter(q => q.section !== 'A');
+
+  if (!writtenQs.length) return alert('This exam has no written (Section B) questions.');
+  if (!allResults.length) return alert('No submissions yet for this exam.');
+
+  let txt = '='.repeat(60) + '\n';
+  txt += 'WRITTEN ANSWERS — ' + (exam.title || 'Untitled') + '\n';
+  txt += 'Total Submissions: ' + allResults.length + '\n';
+  txt += '='.repeat(60) + '\n\n';
+
+  allResults.forEach((result, ri) => {
+    txt += `STUDENT ${ri+1}: ${result.studentName || 'Anonymous'}\n`;
+    txt += `Score: ${result.score ?? '—'}% | Marks: ${result.earnedMarks ?? '—'}/${result.totalMarks ?? '—'}\n`;
+    txt += '-'.repeat(40) + '\n';
+
+    writtenQs.forEach((q, qi) => {
+      const ans = result.answers ? result.answers[q.id] : undefined;
+      txt += `Q${qi+1}. ${q.text}\n`;
+      txt += `Answer: ${ans && ans.trim() ? ans.trim() : '[No answer provided]'}\n\n`;
+    });
+    txt += '\n';
+  });
+
+  txt += '='.repeat(60) + '\n';
+  txt += 'Generated by Career Command Centre\n';
+
+  downloadFile(
+    txt,
+    'written_answers_' + slugify(exam.title) + '.txt',
+    'text/plain'
+  );
+}
+
+/* ── Download Scores CSV ─────────────────────── */
+function downloadScoresCSV(examId) {
+  const exam = DB.getExamById ? DB.getExamById(examId) : null;
+  const results = DB.getResults ? DB.getResults().filter(r => String(r.examId) === String(examId)) : [];
+  if (!results.length) return alert('No results to export.');
+
+  let csv = 'Student Name,Score (%),Correct,Wrong,Earned Marks,Total Marks,Submitted At\n';
+  results.forEach(r => {
+    const date = r.submittedAt ? new Date(r.submittedAt).toLocaleString('en-IN') : '';
+    csv += [
+      '"' + (r.studentName||'').replace(/"/g,'""') + '"',
+      r.score ?? '',
+      r.correctAnswers ?? '',
+      r.wrongAnswers ?? '',
+      r.earnedMarks ?? '',
+      r.totalMarks ?? '',
+      '"' + date + '"'
+    ].join(',') + '\n';
+  });
+
+  downloadFile(csv, 'scores_' + slugify(exam ? exam.title : examId) + '.csv', 'text/csv');
+}
+
+/* ── Helpers ─────────────────────────────────── */
+function downloadFile(content, filename, type) {
+  const blob = new Blob([content], { type });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function slugify(str) {
+  return (str || 'file').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 40);
+}
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Boot ─────────────────────────────────────── */
+// Run after app.js/admin.js initialise DB, then build table
+window.addEventListener('DOMContentLoaded', function() {
+  // slight delay to let other scripts finish
+  setTimeout(renderExamTable, 150);
+});
+</script>
+</body>
+</html>

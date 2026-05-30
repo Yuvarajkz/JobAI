@@ -1,478 +1,440 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Your AI-Powered Career Command Centre</title>
-<link rel="stylesheet" href="style.css" />
-<link rel="stylesheet" href="exam.css" />
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobPrep AI — Career Intelligence Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="grain"></div>
-<div class="bg-canvas">
-  <div class="bg-orb bg-orb--1"></div>
-  <div class="bg-orb bg-orb--2"></div>
-  <div class="bg-orb bg-orb--3"></div>
-  <div class="bg-grid"></div>
-</div>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <div class="navbar__brand">
-    <span class="navbar__logo">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <rect width="28" height="28" rx="8" fill="currentColor" opacity=".12"/>
-        <path d="M7 14L12 19L21 9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </span>
-    <span class="navbar__wordmark">Career <em>Command</em> Centre</span>
-  </div>
-  <div class="navbar__links">
-    <a href="../index.html" class="nav-pill">Dashboard Home</a>
-    <a href="index.html" class="nav-pill nav-pill--active">Dashboard</a>
-    <a href="admin.html" class="nav-pill">Admin Panel</a>
-    <a href="#subjects" class="nav-pill">Subjects</a>
-  </div>
-  <div class="navbar__actions">
-    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-      <span class="theme-toggle__track">
-        <span class="theme-toggle__thumb">
-          <svg class="icon-sun" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/></svg>
-          <svg class="icon-moon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </span>
-      </span>
-    </button>
-  </div>
-</nav>
+  <!-- Grain overlay -->
+  <div class="grain" aria-hidden="true"></div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="eyebrow-chip"><span class="eyebrow-chip__dot"></span>AI-Powered Examination Platform</div>
-  <h1 class="hero__title">Your <em>Career Command</em> Centre</h1>
-  <p class="hero__sub">Conduct professional exams, share links with students, track results — all in one beautifully designed platform.</p>
-  <div class="hero__proof">
-    <div class="proof-item"><strong id="totalExams">0</strong><span>Exams Created</span></div>
-    <div class="proof-sep"></div>
-    <div class="proof-item"><strong id="totalAttempts">0</strong><span>Attempts</span></div>
-    <div class="proof-sep"></div>
-    <div class="proof-item"><strong id="totalSubjects">4</strong><span>Subjects</span></div>
+  <!-- Background -->
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="bg-orb bg-orb--1"></div>
+    <div class="bg-orb bg-orb--2"></div>
+    <div class="bg-orb bg-orb--3"></div>
+    <div class="bg-grid"></div>
   </div>
-</section>
 
-<!-- SUBJECT CARDS -->
-<section id="subjects" style="position:relative;z-index:1;padding:0 clamp(1rem,4vw,2.5rem) 3rem;">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
-    <div>
-      <h2 style="font-family:var(--font-display);font-size:1.4rem;font-weight:800;letter-spacing:-.02em;">Available Subjects</h2>
-      <p style="font-size:13px;color:var(--text-tertiary);margin-top:2px;">Select a subject to manage or start exams</p>
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="navbar__brand">
+      <div class="navbar__logo" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+          <rect x="1" y="1" width="11" height="11" rx="3" fill="currentColor"/>
+          <rect x="14" y="1" width="11" height="11" rx="3" fill="currentColor" opacity="0.45"/>
+          <rect x="1" y="14" width="11" height="11" rx="3" fill="currentColor" opacity="0.45"/>
+          <rect x="14" y="14" width="11" height="11" rx="3" fill="currentColor" opacity="0.18"/>
+        </svg>
+      </div>
+      <span class="navbar__wordmark">JobPrep<em>AI</em></span>
     </div>
-    <a href="admin.html" class="btn btn--primary">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Add Subject / Questions
-    </a>
-  </div>
-  <div id="subjectGrid" class="subject-grid"></div>
-</section>
 
-<!-- RECENT EXAMS TABLE -->
-<section style="position:relative;z-index:1;padding:0 clamp(1rem,4vw,2.5rem) 3rem;">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
-    <h2 style="font-family:var(--font-display);font-size:1.4rem;font-weight:800;letter-spacing:-.02em;">Recent Exam Links</h2>
-    <span class="badge badge--blue" id="examCount">0 exams</span>
-  </div>
-  <div class="card" style="padding:0;overflow:hidden;">
-    <div id="examTableWrap">
-      <div style="padding:3rem;text-align:center;color:var(--text-tertiary);">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 1rem;opacity:.4"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
-        <p style="font-size:14px;">No exams created yet. Go to <a href="admin.html" style="color:var(--accent-blue);font-weight:600;">Admin Panel</a> to create one.</p>
+    <div class="navbar__links" role="list">
+      <a class="nav-pill nav-pill--active" role="listitem" href="#" aria-current="page">Dashboard</a>
+      <a class="nav-pill" role="listitem" href="practice.html">Practice</a>
+      <a class="nav-pill" role="listitem" href="#resume-heading">Resume</a>
+      <a class="nav-pill" role="listitem" href="#progress-heading">Progress</a>
+    </div>
+
+    <div class="navbar__actions">
+      <div class="session-badge" aria-live="polite">
+        <span class="session-badge__dot" aria-hidden="true"></span>
+        <span>Live session</span>
+      </div>
+
+      <!-- Auth links (shown when logged out) -->
+      <div class="auth-links" id="authLinks">
+        <a class="btn-signin" href="login.html">Sign in</a>
+        <a class="btn-getstarted" href="signup.html">Get started</a>
+      </div>
+
+      <button id="toggleMode" class="theme-toggle" aria-label="Toggle colour theme">
+        <span class="theme-toggle__track">
+          <span class="theme-toggle__thumb">
+            <svg class="icon-sun" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M6 1v1M6 10v1M1 6h1M10 6h1M2.64 2.64l.71.71M8.65 8.65l.71.71M8.65 2.64l-.71.71M3.64 8.65l-.71.71" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            <svg class="icon-moon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M10.5 7.5A4.5 4.5 0 014.5 1.5a4.5 4.5 0 100 9 4.5 4.5 0 006-3z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          </span>
+        </span>
+      </button>
+
+      <!-- User menu (shown when logged in) -->
+      <div class="user-menu" id="userMenu" style="display:none; position:relative;">
+        <button class="avatar-btn" id="userMenuBtn" aria-label="User menu" aria-expanded="false" aria-haspopup="true">
+          <div class="avatar" id="userAvatar">JD</div>
+        </button>
+        <div class="user-dropdown" id="userDropdown" hidden role="menu">
+          <div class="user-dropdown__header">
+            <div class="user-dropdown__name" id="dropdownName">John Doe</div>
+            <div class="user-dropdown__email" id="dropdownEmail">john@example.com</div>
+          </div>
+          <div class="user-dropdown__sep"></div>
+          <a class="user-dropdown__item" href="#" role="menuitem">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Profile
+          </a>
+          <a class="user-dropdown__item" href="#" role="menuitem">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M11.54 3.05l-1.41 1.41M4.55 11.54l-1.41 1.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.3"/></svg>
+            Settings
+          </a>
+          <div class="user-dropdown__sep"></div>
+          <button class="user-dropdown__item user-dropdown__item--danger" id="logoutBtn" role="menuitem">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3M10 11l3-3-3-3M13 8H6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Sign out
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- SCORES MODAL -->
-<div id="scoresModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);overflow-y:auto;padding:2rem 1rem;">
-  <div style="max-width:780px;margin:auto;background:var(--surface,#fff);border-radius:20px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.25);">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:1.4rem 1.8rem;border-bottom:1px solid var(--border,#e5e7eb);">
-      <h2 id="modalTitle" style="font-size:1.15rem;font-weight:800;font-family:var(--font-display,sans-serif);">Exam Scores</h2>
-      <button onclick="closeModal()" style="border:none;background:none;cursor:pointer;font-size:1.4rem;line-height:1;color:var(--text-secondary,#666);">✕</button>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile drawer -->
+  <div class="mobile-drawer" id="mobileDrawer" role="dialog" aria-modal="true" aria-label="Navigation menu" hidden>
+    <nav>
+      <a class="drawer-link" href="#">Dashboard</a>
+      <a class="drawer-link" href="practice.html">Practice</a>
+      <a class="drawer-link" href="#resume-heading">Resume</a>
+      <a class="drawer-link" href="#progress-heading">Progress</a>
+    </nav>
+  </div>
+
+  <!-- Hero -->
+  <header class="hero" role="banner">
+    <div class="hero__eyebrow">
+      <span class="eyebrow-chip">
+        <span class="eyebrow-chip__dot" aria-hidden="true"></span>
+        Career Intelligence Platform
+      </span>
     </div>
-    <div id="modalBody" style="padding:1.8rem;"></div>
-  </div>
-</div>
-
-<footer class="footer">
-  <div class="footer__inner">
-    <div class="footer__brand">
-      <svg width="16" height="16" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="var(--accent-blue)" opacity=".15"/><path d="M7 14L12 19L21 9" stroke="var(--accent-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Career Command Centre
+    <h1 class="hero__title">Your AI-Powered<br><em>Career Command Centre</em></h1>
+    <p class="hero__sub">Upload your resume, sharpen your skills, and practice interviews with a real AI coach — all in one beautifully designed space.</p>
+    <div class="hero__proof" role="list" aria-label="Platform statistics">
+      <div class="proof-item" role="listitem">
+        <strong>2,400+</strong>
+        <span>mock questions</span>
+      </div>
+      <div class="proof-sep" aria-hidden="true"></div>
+      <div class="proof-item" role="listitem">
+        <strong>94%</strong>
+        <span>satisfaction</span>
+      </div>
+      <div class="proof-sep" aria-hidden="true"></div>
+      <div class="proof-item" role="listitem">
+        <strong>12s</strong>
+        <span>avg AI response</span>
+      </div>
     </div>
-    <span class="footer__copy">© 2025 · AI-Powered Exam Platform</span>
-  </div>
-</footer>
+  </header>
 
-<script src="data.js"></script>
-<script src="app.js"></script>
-<script src="admin.js"></script>
+  <!-- Dashboard Grid -->
+  <main class="grid" id="main-content" role="main">
 
-<style>
-/* ── Exam Table ─────────────────────────────── */
-.exam-table { width:100%; border-collapse:collapse; font-size:13.5px; }
-.exam-table th {
-  background:var(--surface-2,#f9fafb);
-  color:var(--text-tertiary,#6b7280);
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:.05em;
-  font-size:11px;
-  padding:.75rem 1.1rem;
-  text-align:left;
-  border-bottom:1px solid var(--border,#e5e7eb);
-}
-.exam-table td {
-  padding:.9rem 1.1rem;
-  border-bottom:1px solid var(--border,#e5e7eb);
-  vertical-align:middle;
-  color:var(--text-primary,#111827);
-}
-.exam-table tr:last-child td { border-bottom:none; }
-.exam-table tr:hover td { background:var(--surface-2,#f9fafb); }
+    <!-- ── Col A: Resume + Skills ── -->
+    <div class="col col--a">
 
-.action-btn {
-  display:inline-flex;
-  align-items:center;
-  gap:.35rem;
-  padding:.38rem .75rem;
-  border-radius:8px;
-  border:1.5px solid transparent;
-  font-size:12px;
-  font-weight:700;
-  cursor:pointer;
-  text-decoration:none;
-  transition:all .15s;
-  white-space:nowrap;
-}
-.action-btn--open   { background:#eff6ff;color:#2563eb;border-color:#bfdbfe; }
-.action-btn--open:hover   { background:#2563eb;color:#fff; }
-.action-btn--score  { background:#f0fdf4;color:#16a34a;border-color:#bbf7d0; }
-.action-btn--score:hover  { background:#16a34a;color:#fff; }
-.action-btn--dlq    { background:#fefce8;color:#ca8a04;border-color:#fde68a; }
-.action-btn--dlq:hover    { background:#ca8a04;color:#fff; }
-.action-btn--dlw    { background:#fdf4ff;color:#9333ea;border-color:#e9d5ff; }
-.action-btn--dlw:hover    { background:#9333ea;color:#fff; }
+      <!-- Resume Card -->
+      <article class="card" aria-labelledby="resume-heading">
+        <div class="card__top">
+          <div class="card__icon-wrap card__icon-wrap--blue" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M10 1H4a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7L10 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 1v6h6M6 10h6M6 13h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <h2 class="card__title" id="resume-heading">Resume Analyser</h2>
+            <p class="card__caption">AI-powered feedback in seconds</p>
+          </div>
+        </div>
 
-.actions-cell { display:flex;flex-wrap:wrap;gap:.4rem; }
+        <label class="dropzone" id="uploadZone" for="resumeUpload" role="button" tabindex="0" aria-describedby="dropzone-hint">
+          <input type="file" id="resumeUpload" accept=".pdf,.doc,.docx" aria-label="Upload resume">
+          <div class="dropzone__body">
+            <div class="dropzone__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><path d="M16 22V10M10 16l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 26h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <p class="dropzone__label">Drop your resume here</p>
+            <p class="dropzone__hint" id="dropzone-hint">PDF or DOC — up to 5 MB</p>
+          </div>
+        </label>
 
-/* Scores table inside modal */
-.scores-table { width:100%;border-collapse:collapse;font-size:13px; }
-.scores-table th { background:#f9fafb;padding:.6rem .9rem;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;border-bottom:1px solid #e5e7eb; }
-.scores-table td { padding:.7rem .9rem;border-bottom:1px solid #f3f4f6; }
-.scores-table tr:last-child td { border-bottom:none; }
-.score-badge { display:inline-block;padding:.2rem .55rem;border-radius:6px;font-weight:800;font-size:12px; }
-.score-badge--high  { background:#dcfce7;color:#15803d; }
-.score-badge--mid   { background:#fef9c3;color:#a16207; }
-.score-badge--low   { background:#fee2e2;color:#b91c1c; }
-</style>
-
-<script>
-/* ── Theme ───────────────────────────────────── */
-function toggleTheme() {
-  const html = document.documentElement;
-  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('theme', html.dataset.theme);
-}
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme) document.documentElement.dataset.theme = savedTheme;
-
-/* ── Render Recent Exam Links Table ──────────── */
-function renderExamTable() {
-  const wrap = document.getElementById('examTableWrap');
-  const countBadge = document.getElementById('examCount');
-
-  // DB guard — data.js must define window.DB
-  if (typeof DB === 'undefined') return;
-
-  const exams = DB.getExams ? DB.getExams() : [];
-  if (!exams || exams.length === 0) return; // keep placeholder
-
-  countBadge.textContent = exams.length + (exams.length === 1 ? ' exam' : ' exams');
-
-  // Update hero stats
-  const totalAttempts = exams.reduce((acc, e) => {
-    const results = DB.getResults ? DB.getResults().filter(r => String(r.examId) === String(e.id)) : [];
-    return acc + results.length;
-  }, 0);
-  const el = document.getElementById('totalAttempts');
-  if (el) el.textContent = totalAttempts;
-  const elExams = document.getElementById('totalExams');
-  if (elExams) elExams.textContent = exams.length;
-
-  const rows = exams.map(exam => {
-    const examUrl = `exam.html?id=${exam.id}`;
-    const subject = DB.getSubjects ? DB.getSubjects().find(s => String(s.id) === String(exam.subjectId)) : null;
-    const subjectName = subject ? subject.name : ('Subject #' + exam.subjectId);
-    const results = DB.getResults ? DB.getResults().filter(r => String(r.examId) === String(exam.id)) : [];
-    const attempts = results.length;
-    const createdAt = exam.createdAt ? new Date(exam.createdAt).toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'}) : '—';
-
-    return `
-      <tr>
-        <td style="font-weight:700;">${escHtml(exam.title)}</td>
-        <td>${escHtml(subjectName)}</td>
-        <td>${exam.duration ? exam.duration + ' min' : '—'}</td>
-        <td>${createdAt}</td>
-        <td><span style="font-weight:700;">${attempts}</span></td>
-        <td>
-          <div class="actions-cell">
-            <a href="${examUrl}" target="_blank" class="action-btn action-btn--open">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              Open Exam
-            </a>
-            <button onclick="viewScores('${exam.id}')" class="action-btn action-btn--score">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-              Scores
+        <div class="upload-result" id="uploadResult" aria-live="polite" hidden>
+          <div class="upload-result__file">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M9 1H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V6L9 1z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9 1v5h5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            <span id="fileName" class="upload-result__name"></span>
+            <span class="badge badge--teal">✓ Uploaded</span>
+          </div>
+          <div class="score-row" aria-label="Resume analysis scores">
+            <div class="score-item">
+              <div class="score-ring" data-score="78" aria-label="ATS score 78%">
+                <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
+                  <circle cx="22" cy="22" r="18" stroke-width="3" class="score-ring__bg"/>
+                  <circle cx="22" cy="22" r="18" stroke-width="3" class="score-ring__fill score-ring__fill--blue" stroke-dasharray="113.1" stroke-dashoffset="24.9" stroke-linecap="round"/>
+                </svg>
+                <span class="score-ring__num">78</span>
+              </div>
+              <span class="score-item__lbl">ATS</span>
+            </div>
+            <div class="score-item">
+              <div class="score-ring" data-score="65" aria-label="Keywords score 65%">
+                <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
+                  <circle cx="22" cy="22" r="18" stroke-width="3" class="score-ring__bg"/>
+                  <circle cx="22" cy="22" r="18" stroke-width="3" class="score-ring__fill score-ring__fill--amber" stroke-dasharray="113.1" stroke-dashoffset="39.6" stroke-linecap="round"/>
+                </svg>
+                <span class="score-ring__num">65</span>
+              </div>
+              <span class="score-item__lbl">Keywords</span>
+            </div>
+            <div class="score-item">
+              <div class="score-ring" data-score="91" aria-label="Readability score 91%">
+                <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
+                  <circle cx="22" cy="22" r="18" stroke-width="3" class="score-ring__bg"/>
+                  <circle cx="22" cy="22" r="18" stroke-width="3" class="score-ring__fill score-ring__fill--purple" stroke-dasharray="113.1" stroke-dashoffset="10.2" stroke-linecap="round"/>
+                </svg>
+                <span class="score-ring__num">91</span>
+              </div>
+              <span class="score-item__lbl">Clarity</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 15px;">
+            <button class="btn btn--primary" id="viewReportBtn" style="flex: 1;" onclick="openAtsModal()">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="margin-right:4px;"><path d="M2 14h12M4 11V5a2 2 0 014 0v6M8 8h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              View Report
             </button>
-            <button onclick="downloadQuestions('${exam.id}')" class="action-btn action-btn--dlq">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Questions
-            </button>
-            <button onclick="downloadWritten('${exam.id}')" class="action-btn action-btn--dlw">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-              Written
+            <button class="btn btn--ghost" id="clearResumeBtn" style="padding: 8px 12px;" onclick="resetResume()" title="Upload new resume">
+              Clear
             </button>
           </div>
-        </td>
-      </tr>`;
-  }).join('');
-
-  wrap.innerHTML = `
-    <div style="overflow-x:auto;">
-      <table class="exam-table">
-        <thead>
-          <tr>
-            <th>Exam Title</th>
-            <th>Subject</th>
-            <th>Duration</th>
-            <th>Created</th>
-            <th>Attempts</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>`;
-}
-
-/* ── View Scores Modal ───────────────────────── */
-function viewScores(examId) {
-  const exam = DB.getExamById ? DB.getExamById(examId) : null;
-  const results = DB.getResults ? DB.getResults().filter(r => String(r.examId) === String(examId)) : [];
-  const title = exam ? exam.title : 'Exam';
-
-  document.getElementById('modalTitle').textContent = '📊 Scores — ' + title;
-
-  if (!results.length) {
-    document.getElementById('modalBody').innerHTML = `
-      <div style="text-align:center;padding:2rem;color:#9ca3af;">
-        <p style="font-size:14px;">No attempts yet for this exam.</p>
-      </div>`;
-  } else {
-    const avgScore = Math.round(results.reduce((a,r) => a + (r.score||0), 0) / results.length);
-    const rows = results.map((r, i) => {
-      const cls = r.score >= 75 ? 'score-badge--high' : r.score >= 50 ? 'score-badge--mid' : 'score-badge--low';
-      const date = r.submittedAt ? new Date(r.submittedAt).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
-      return `
-        <tr>
-          <td style="font-weight:600;">${i+1}. ${escHtml(r.studentName || 'Anonymous')}</td>
-          <td><span class="score-badge ${cls}">${r.score ?? '—'}%</span></td>
-          <td>${r.correctAnswers ?? '—'} / ${(r.correctAnswers||0)+(r.wrongAnswers||0)}</td>
-          <td>${r.earnedMarks ?? '—'} / ${r.totalMarks ?? '—'}</td>
-          <td style="color:#6b7280;font-size:12px;">${date}</td>
-        </tr>`;
-    }).join('');
-
-    document.getElementById('modalBody').innerHTML = `
-      <div style="display:flex;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap;">
-        <div style="flex:1;min-width:120px;background:#f9fafb;border-radius:12px;padding:1rem;text-align:center;">
-          <div style="font-size:1.6rem;font-weight:900;color:#2563eb;">${results.length}</div>
-          <div style="font-size:12px;color:#6b7280;font-weight:600;">Attempts</div>
         </div>
-        <div style="flex:1;min-width:120px;background:#f9fafb;border-radius:12px;padding:1rem;text-align:center;">
-          <div style="font-size:1.6rem;font-weight:900;color:#16a34a;">${avgScore}%</div>
-          <div style="font-size:12px;color:#6b7280;font-weight:600;">Avg Score</div>
+      </article>
+
+      <!-- Skills Card -->
+      <article class="card" aria-labelledby="skills-heading">
+        <div class="card__top">
+          <div class="card__icon-wrap card__icon-wrap--teal" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 1l2.09 4.26L16 6.18l-3.5 3.41.83 4.83L9 12.27l-4.33 2.15.83-4.83L2 6.18l4.91-.92z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <h2 class="card__title" id="skills-heading">Skill Tracker</h2>
+            <p class="card__caption">Your mastery at a glance</p>
+          </div>
         </div>
-        <div style="flex:1;min-width:120px;background:#f9fafb;border-radius:12px;padding:1rem;text-align:center;">
-          <div style="font-size:1.6rem;font-weight:900;color:#9333ea;">${Math.max(...results.map(r=>r.score||0))}%</div>
-          <div style="font-size:12px;color:#6b7280;font-weight:600;">Top Score</div>
+
+        <div class="skills-list" role="list">
+          <div class="skill" role="listitem">
+            <div class="skill__row">
+              <span class="skill__name">System Design</span>
+              <span class="skill__pct" id="skill1Pct">60%</span>
+            </div>
+            <div class="skill__track" aria-label="System Design 60%" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+              <div class="skill__fill skill__fill--blue" id="skill1Bar" style="width:60%"></div>
+            </div>
+          </div>
+          <div class="skill" role="listitem">
+            <div class="skill__row">
+              <span class="skill__name">Algorithms</span>
+              <span class="skill__pct" id="skill2Pct">45%</span>
+            </div>
+            <div class="skill__track" aria-label="Algorithms 45%" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">
+              <div class="skill__fill skill__fill--coral" id="skill2Bar" style="width:45%"></div>
+            </div>
+          </div>
+          <div class="skill" role="listitem">
+            <div class="skill__row">
+              <span class="skill__name">Behavioural</span>
+              <span class="skill__pct" id="skill3Pct">80%</span>
+            </div>
+            <div class="skill__track" aria-label="Behavioural 80%" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
+              <div class="skill__fill skill__fill--purple" id="skill3Bar" style="width:80%"></div>
+            </div>
+          </div>
+          <div class="skill" role="listitem">
+            <div class="skill__row">
+              <span class="skill__name">Data Structures</span>
+              <span class="skill__pct" id="skill4Pct">35%</span>
+            </div>
+            <div class="skill__track" aria-label="Data Structures 35%" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
+              <div class="skill__fill skill__fill--amber" id="skill4Bar" style="width:35%"></div>
+            </div>
+          </div>
         </div>
+
+        <div class="card__actions">
+          <button class="btn btn--primary" onclick="improveSkill()">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1v6M7 7l3-3M7 7L4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 10c.9 2 2.8 3 6 3s5.1-1 6-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Practice Session
+          </button>
+          <button class="btn btn--ghost" onclick="resetSkills()">Reset</button>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- ── Col B: Chat ── -->
+    <div class="col col--b">
+      <article class="card card--chat" aria-labelledby="chat-heading">
+
+        <div class="chat-header">
+          <div class="card__icon-wrap card__icon-wrap--coral" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M16 11a2 2 0 01-2 2H5l-3 3V4a2 2 0 012-2h10a2 2 0 012 2v7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="chat-header__text">
+            <h2 class="card__title" id="chat-heading">Mock Interview</h2>
+            <p class="card__caption">AI interviewer — powered by Claude</p>
+          </div>
+          <div class="mode-switch" role="group" aria-label="Interview type">
+            <button class="mode-btn mode-btn--active" id="modeTech" onclick="setMode('tech')" aria-pressed="true">Technical</button>
+            <button class="mode-btn" id="modeBehav" onclick="setMode('behav')" aria-pressed="false">Behavioural</button>
+          </div>
+        </div>
+
+        <div class="chat-window" id="chatBox" role="log" aria-live="polite" aria-label="Interview conversation"></div>
+
+        <div class="suggestions" id="chatSuggestions" aria-label="Suggested responses">
+          <button class="suggestion" onclick="useSuggestion(this)">Tell me about a challenge you overcame</button>
+          <button class="suggestion" onclick="useSuggestion(this)">I'm applying for a senior role</button>
+          <button class="suggestion" onclick="useSuggestion(this)">Skip to next question →</button>
+        </div>
+
+        <div class="composer" role="group" aria-label="Message input">
+          <textarea id="userInput" class="composer__input" placeholder="Type your answer…" rows="1" aria-label="Your interview answer" onkeydown="handleKeydown(event)" oninput="autoResize(this)"></textarea>
+          <button class="composer__send" id="sendBtn" onclick="sendMessage()" aria-label="Send message">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M16 2L1 8l6 3 3 6 6-15z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
+      </article>
+    </div>
+
+    <!-- ── Col C: Stats + Tips ── -->
+    <div class="col col--c">
+
+      <!-- Progress Card -->
+      <article class="card" aria-labelledby="progress-heading">
+        <div class="card__top">
+          <div class="card__icon-wrap card__icon-wrap--purple" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M2 14h14M5 14V8M9 14V4M13 14v-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <h2 class="card__title" id="progress-heading">Your Progress</h2>
+            <p class="card__caption">This week's activity</p>
+          </div>
+        </div>
+
+        <div class="stat-grid" role="list">
+          <div class="stat-tile" role="listitem">
+            <strong class="stat-tile__val" id="sessionCount">0</strong>
+            <span class="stat-tile__lbl">Sessions</span>
+          </div>
+          <div class="stat-tile" role="listitem">
+            <strong class="stat-tile__val" id="questionCount">0</strong>
+            <span class="stat-tile__lbl">Questions</span>
+          </div>
+          <div class="stat-tile stat-tile--full" role="listitem">
+            <strong class="stat-tile__val streak" id="streakCount">Day 1</strong>
+            <span class="stat-tile__lbl">🔥 Current streak</span>
+          </div>
+        </div>
+
+        <div class="activity" aria-label="7-day activity chart">
+          <div class="activity__bars" id="activityBars" aria-hidden="true"></div>
+          <div class="activity__days" aria-hidden="true">
+            <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Tips Card -->
+      <article class="card" aria-labelledby="tips-heading">
+        <div class="card__top">
+          <div class="card__icon-wrap card__icon-wrap--amber" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 1a6 6 0 016 6c0 2.5-1.5 4.5-3 5.5V14H6v-1.5C4.5 11.5 3 9.5 3 7a6 6 0 016-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M6.5 14v1a2.5 2.5 0 005 0v-1" stroke="currentColor" stroke-width="1.5"/></svg>
+          </div>
+          <div>
+            <h2 class="card__title" id="tips-heading">Interview Tips</h2>
+            <p class="card__caption">Today's focus area</p>
+          </div>
+        </div>
+
+        <div class="carousel" id="tipsCarousel" role="region" aria-label="Interview tips">
+          <div class="tip tip--active" role="article">
+            <div class="tip__num" aria-hidden="true">01</div>
+            <p class="tip__text">Use the <strong>STAR method</strong> — Situation, Task, Action, Result — for every behavioural question.</p>
+            <span class="badge badge--blue">Behavioural</span>
+          </div>
+          <div class="tip" role="article">
+            <div class="tip__num" aria-hidden="true">02</div>
+            <p class="tip__text"><strong>Clarify requirements</strong> before diving in. Smart questions show senior engineering thinking.</p>
+            <span class="badge badge--teal">Technical</span>
+          </div>
+          <div class="tip" role="article">
+            <div class="tip__num" aria-hidden="true">03</div>
+            <p class="tip__text"><strong>Think out loud.</strong> Interviewers value your reasoning as much as the final answer.</p>
+            <span class="badge badge--coral">General</span>
+          </div>
+        </div>
+
+        <div class="carousel-nav" role="group" aria-label="Tip navigation">
+          <button class="carousel-nav__btn" onclick="prevTip()" aria-label="Previous tip">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 2L3.5 6l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="carousel-dots" id="tipDots" role="tablist" aria-label="Tip indicators"></div>
+          <button class="carousel-nav__btn" onclick="nextTip()" aria-label="Next tip">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4.5 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <div class="navbar__logo" style="color:var(--accent-blue)" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 26 26" fill="none">
+            <rect x="1" y="1" width="11" height="11" rx="3" fill="currentColor"/>
+            <rect x="14" y="1" width="11" height="11" rx="3" fill="currentColor" opacity="0.45"/>
+            <rect x="1" y="14" width="11" height="11" rx="3" fill="currentColor" opacity="0.45"/>
+            <rect x="14" y="14" width="11" height="11" rx="3" fill="currentColor" opacity="0.18"/>
+          </svg>
+        </div>
+        <span>JobPrep AI</span>
       </div>
-      <div style="overflow-x:auto;">
-        <table class="scores-table">
-          <thead>
-            <tr>
-              <th>Student</th>
-              <th>Score</th>
-              <th>Correct / Total</th>
-              <th>Marks</th>
-              <th>Submitted</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
+      <p class="footer__copy">Built to help you land your dream job &mdash; <span id="footerYear"></span></p>
+    </div>
+  </footer>
+
+  <!-- ATS Feedback Modal -->
+  <div class="modal" id="atsModal" hidden>
+    <div class="modal__overlay" onclick="closeAtsModal()"></div>
+    <div class="modal__content">
+      <button class="modal__close" onclick="closeAtsModal()" aria-label="Close modal">&times;</button>
+      <h3 class="modal__title">ATS Parsing & Diagnostic Report</h3>
+      <div class="modal__body" id="atsReportBody">
+        <!-- Content injected dynamically -->
       </div>
-      <div style="margin-top:1rem;text-align:right;">
-        <button onclick="downloadScoresCSV('${examId}')" class="action-btn action-btn--score" style="font-size:13px;padding:.5rem 1rem;">
-          ⬇ Export CSV
-        </button>
-      </div>`;
-  }
+    </div>
+  </div>
 
-  document.getElementById('scoresModal').style.display = 'block';
-  document.body.style.overflow = 'hidden';
-}
+  <!-- Firebase SDK Compat -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="firebase-config.js"></script>
 
-function closeModal() {
-  document.getElementById('scoresModal').style.display = 'none';
-  document.body.style.overflow = '';
-}
-
-// Close modal on backdrop click
-document.getElementById('scoresModal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-
-/* ── Download Questions ──────────────────────── */
-function downloadQuestions(examId) {
-  const exam = DB.getExamById ? DB.getExamById(examId) : null;
-  if (!exam) return alert('Exam not found.');
-
-  const questions = DB.getQuestions ? DB.getQuestions().filter(q => String(q.subjectId) === String(exam.subjectId)) : [];
-  if (!questions.length) return alert('No questions found for this exam.');
-
-  let txt = '='.repeat(60) + '\n';
-  txt += 'EXAM: ' + (exam.title || 'Untitled') + '\n';
-  txt += 'Duration: ' + (exam.duration || '—') + ' minutes\n';
-  txt += 'Instructions: ' + (exam.instructions || 'Answer all questions.') + '\n';
-  txt += '='.repeat(60) + '\n\n';
-
-  const secA = questions.filter(q => q.section === 'A');
-  const secB = questions.filter(q => q.section !== 'A');
-
-  if (secA.length) {
-    txt += 'SECTION A — Multiple Choice (' + secA.length + ' questions)\n';
-    txt += '-'.repeat(40) + '\n\n';
-    secA.forEach((q, i) => {
-      txt += `Q${i+1}. ${q.text}\n`;
-      if (q.options) q.options.forEach((opt, idx) => { txt += `   ${String.fromCharCode(65+idx)}) ${opt}\n`; });
-      txt += '\n';
-    });
-  }
-
-  if (secB.length) {
-    txt += '\nSECTION B — Written / Descriptive (' + secB.length + ' questions)\n';
-    txt += '-'.repeat(40) + '\n\n';
-    secB.forEach((q, i) => {
-      txt += `Q${i+1}. ${q.text}  [${q.marks || 1} mark${q.marks!==1?'s':''}]\n\n`;
-    });
-  }
-
-  txt += '\n' + '='.repeat(60) + '\n';
-  txt += 'Generated by Career Command Centre\n';
-
-  downloadFile(
-    txt,
-    'questions_' + slugify(exam.title) + '.txt',
-    'text/plain'
-  );
-}
-
-/* ── Download Written Answers ────────────────── */
-function downloadWritten(examId) {
-  const exam = DB.getExamById ? DB.getExamById(examId) : null;
-  if (!exam) return alert('Exam not found.');
-
-  const allResults = DB.getResults ? DB.getResults().filter(r => String(r.examId) === String(examId)) : [];
-  const questions  = DB.getQuestions ? DB.getQuestions().filter(q => String(q.subjectId) === String(exam.subjectId)) : [];
-  const writtenQs  = questions.filter(q => q.section !== 'A');
-
-  if (!writtenQs.length) return alert('This exam has no written (Section B) questions.');
-  if (!allResults.length) return alert('No submissions yet for this exam.');
-
-  let txt = '='.repeat(60) + '\n';
-  txt += 'WRITTEN ANSWERS — ' + (exam.title || 'Untitled') + '\n';
-  txt += 'Total Submissions: ' + allResults.length + '\n';
-  txt += '='.repeat(60) + '\n\n';
-
-  allResults.forEach((result, ri) => {
-    txt += `STUDENT ${ri+1}: ${result.studentName || 'Anonymous'}\n`;
-    txt += `Score: ${result.score ?? '—'}% | Marks: ${result.earnedMarks ?? '—'}/${result.totalMarks ?? '—'}\n`;
-    txt += '-'.repeat(40) + '\n';
-
-    writtenQs.forEach((q, qi) => {
-      const ans = result.answers ? result.answers[q.id] : undefined;
-      txt += `Q${qi+1}. ${q.text}\n`;
-      txt += `Answer: ${ans && ans.trim() ? ans.trim() : '[No answer provided]'}\n\n`;
-    });
-    txt += '\n';
-  });
-
-  txt += '='.repeat(60) + '\n';
-  txt += 'Generated by Career Command Centre\n';
-
-  downloadFile(
-    txt,
-    'written_answers_' + slugify(exam.title) + '.txt',
-    'text/plain'
-  );
-}
-
-/* ── Download Scores CSV ─────────────────────── */
-function downloadScoresCSV(examId) {
-  const exam = DB.getExamById ? DB.getExamById(examId) : null;
-  const results = DB.getResults ? DB.getResults().filter(r => String(r.examId) === String(examId)) : [];
-  if (!results.length) return alert('No results to export.');
-
-  let csv = 'Student Name,Score (%),Correct,Wrong,Earned Marks,Total Marks,Submitted At\n';
-  results.forEach(r => {
-    const date = r.submittedAt ? new Date(r.submittedAt).toLocaleString('en-IN') : '';
-    csv += [
-      '"' + (r.studentName||'').replace(/"/g,'""') + '"',
-      r.score ?? '',
-      r.correctAnswers ?? '',
-      r.wrongAnswers ?? '',
-      r.earnedMarks ?? '',
-      r.totalMarks ?? '',
-      '"' + date + '"'
-    ].join(',') + '\n';
-  });
-
-  downloadFile(csv, 'scores_' + slugify(exam ? exam.title : examId) + '.csv', 'text/csv');
-}
-
-/* ── Helpers ─────────────────────────────────── */
-function downloadFile(content, filename, type) {
-  const blob = new Blob([content], { type });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-
-function slugify(str) {
-  return (str || 'file').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 40);
-}
-
-function escHtml(str) {
-  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-/* ── Boot ─────────────────────────────────────── */
-// Run after app.js/admin.js initialise DB, then build table
-window.addEventListener('DOMContentLoaded', function() {
-  // slight delay to let other scripts finish
-  setTimeout(renderExamTable, 150);
-});
-</script>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
