@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin Panel · Career Command Centre</title>
+<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="exam.css"/>
+</head>
+<body>
+<div class="grain"></div>
+<div class="bg-canvas">
+  <div class="bg-orb bg-orb--1"></div>
+  <div class="bg-orb bg-orb--2"></div>
+  <div class="bg-orb bg-orb--3"></div>
+  <div class="bg-grid"></div>
+</div>
+
+<nav class="navbar">
+  <div class="navbar__brand">
+    <span class="navbar__logo" style="color:var(--accent-blue);">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="currentColor" opacity=".12"/><path d="M7 14L12 19L21 9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    <span class="navbar__wordmark">Career <em>Command</em> Centre</span>
+  </div>
+  <div class="navbar__links">
+    <a href="../index.html" class="nav-pill">Dashboard Home</a>
+    <a href="index.html" class="nav-pill">Dashboard</a>
+    <a href="admin.html" class="nav-pill nav-pill--active">Admin Panel</a>
+  </div>
+  <div class="navbar__actions">
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <span class="theme-toggle__track"><span class="theme-toggle__thumb">
+        <svg class="icon-sun" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/></svg>
+        <svg class="icon-moon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </span></span>
+    </button>
+  </div>
+</nav>
+
+<div style="position:relative;z-index:1;padding:2rem clamp(1rem,4vw,2.5rem) 3rem;max-width:1100px;margin:0 auto;">
+  <div style="margin-bottom:2rem;">
+    <h1 style="font-family:var(--font-display);font-size:1.9rem;font-weight:900;letter-spacing:-.03em;">Admin Panel</h1>
+    <p style="color:var(--text-secondary);font-size:14px;margin-top:4px;">Manage subjects, add questions, create & share exam links</p>
+  </div>
+
+  <!-- TABS -->
+  <div class="admin-tabs" style="display:flex;gap:4px;margin-bottom:2rem;border-bottom:1px solid var(--border-soft);padding-bottom:0;">
+    <button class="admin-tab admin-tab--active" onclick="switchTab('subjects')">📚 Subjects</button>
+    <button class="admin-tab" onclick="switchTab('questions')">❓ Questions</button>
+    <button class="admin-tab" onclick="switchTab('create-exam')">🔗 Create Exam Link</button>
+    <button class="admin-tab" onclick="switchTab('results')">📊 Results</button>
+  </div>
+
+  <!-- TAB: SUBJECTS -->
+  <div id="tab-subjects" class="tab-content">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;">
+      <!-- Add Subject Form -->
+      <div class="card">
+        <div class="card__top">
+          <div class="card__icon-wrap card__icon-wrap--blue">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          <div><div class="card__title">Add New Subject</div><div class="card__caption">Add a custom subject to the platform</div></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subject Name</label>
+          <input type="text" id="newSubjectName" class="form-input" placeholder="e.g. Data Structures" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <input type="text" id="newSubjectDesc" class="form-input" placeholder="Short description..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Icon (emoji)</label>
+          <input type="text" id="newSubjectIcon" class="form-input" placeholder="e.g. 🧮" maxlength="4" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color Theme</label>
+          <select id="newSubjectColor" class="form-input">
+            <option value="blue">Blue</option>
+            <option value="teal">Teal</option>
+            <option value="coral">Coral</option>
+            <option value="purple">Purple</option>
+            <option value="amber">Amber</option>
+          </select>
+        </div>
+        <button class="btn btn--primary" style="width:100%;justify-content:center;" onclick="addSubject()">Add Subject</button>
+      </div>
+
+      <!-- Subject List -->
+      <div>
+        <div id="adminSubjectList" style="display:flex;flex-direction:column;gap:.75rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: QUESTIONS -->
+  <div id="tab-questions" class="tab-content" style="display:none;">
+    <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:1.5rem;align-items:start;">
+      <!-- Add Question Form -->
+      <div class="card" style="position:sticky;top:80px;">
+        <div class="card__top">
+          <div class="card__icon-wrap card__icon-wrap--purple">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div><div class="card__title">Add Question</div><div class="card__caption">Add questions to any subject</div></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <select id="qSubject" class="form-input" onchange="updateSectionOptions()"></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Section</label>
+          <select id="qSection" class="form-input">
+            <option value="A">Section A — Multiple Choice</option>
+            <option value="B">Section B — Short Answer</option>
+            <option value="C">Section C — Long Answer</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Question Text</label>
+          <textarea id="qText" class="form-input" rows="3" placeholder="Enter your question..."></textarea>
+        </div>
+        <div id="optionsArea">
+          <div class="form-group">
+            <label class="form-label">Options (Section A only)</label>
+            <input type="text" id="qOpt1" class="form-input" placeholder="Option A" style="margin-bottom:6px;"/>
+            <input type="text" id="qOpt2" class="form-input" placeholder="Option B" style="margin-bottom:6px;"/>
+            <input type="text" id="qOpt3" class="form-input" placeholder="Option C" style="margin-bottom:6px;"/>
+            <input type="text" id="qOpt4" class="form-input" placeholder="Option D"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Correct Option (A/B/C/D)</label>
+            <select id="qCorrect" class="form-input">
+              <option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Marks</label>
+          <input type="number" id="qMarks" class="form-input" value="1" min="1" max="20"/>
+        </div>
+        <button class="btn btn--primary" style="width:100%;justify-content:center;" onclick="addQuestion()">Add Question</button>
+      </div>
+
+      <!-- Questions by Subject -->
+      <div id="questionsBySubject" style="display:flex;flex-direction:column;gap:1rem;"></div>
+    </div>
+  </div>
+
+  <!-- TAB: CREATE EXAM -->
+  <div id="tab-create-exam" class="tab-content" style="display:none;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;">
+      <div class="card">
+        <div class="card__top">
+          <div class="card__icon-wrap card__icon-wrap--teal">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </div>
+          <div><div class="card__title">Create Exam Link</div><div class="card__caption">Configure and generate a shareable exam URL</div></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Exam Title</label>
+          <input type="text" id="examTitle" class="form-input" placeholder="e.g. Technical Round - Batch 2025"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <select id="examSubject" class="form-input"></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Duration (minutes)</label>
+          <input type="number" id="examDuration" class="form-input" value="60" min="5" max="300"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Instructions (optional)</label>
+          <textarea id="examInstructions" class="form-input" rows="2" placeholder="e.g. Read all questions carefully..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <input type="checkbox" id="examShowResult" checked style="accent-color:var(--accent-blue);width:15px;height:15px;"/>
+            Show results immediately after exam
+          </label>
+        </div>
+        <button class="btn btn--primary" style="width:100%;justify-content:center;" onclick="createExamLink()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Generate Exam Link
+        </button>
+      </div>
+
+      <!-- Generated Links -->
+      <div>
+        <h3 style="font-family:var(--font-display);font-weight:800;margin-bottom:1rem;font-size:1rem;">Generated Exam Links</h3>
+        <div id="generatedLinks" style="display:flex;flex-direction:column;gap:.75rem;">
+          <div style="text-align:center;padding:2rem;color:var(--text-tertiary);font-size:13px;">No links generated yet.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: RESULTS -->
+  <div id="tab-results" class="tab-content" style="display:none;">
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:1.4rem;border-bottom:1px solid var(--border-soft);display:flex;align-items:center;justify-content:space-between;">
+        <h3 style="font-family:var(--font-display);font-weight:800;">All Exam Results</h3>
+        <button class="btn btn--ghost" onclick="clearResults()" style="font-size:12px;color:#ef4444;border-color:rgba(239,68,68,.2);">Clear All</button>
+      </div>
+      <div id="resultsTable">
+        <div style="padding:3rem;text-align:center;color:var(--text-tertiary);">No results yet.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast" style="display:none;"></div>
+
+<script src="data.js"></script>
+<script src="admin.js"></script>
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', html.dataset.theme);
+}
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+</script>
+</body>
+</html>

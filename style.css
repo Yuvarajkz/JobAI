@@ -224,18 +224,7 @@ img, svg { display: block; }
 [data-theme="dark"] .icon-sun { display: none; }
 [data-theme="dark"] .icon-moon { display: block; }
 
-.avatar-btn {
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  outline: none;
-}
+.avatar-btn { cursor: pointer; }
 .avatar {
   width: 32px; height: 32px; border-radius: 50%;
   background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
@@ -778,53 +767,4 @@ img, svg { display: block; }
 @media (max-width: 380px) {
   .card { padding: 1.1rem; }
   .suggestions { display: none; }
-}
-
-/* ─── ATS Feedback Modal ─────────────────────────────────── */
-.modal {
-  position: fixed; inset: 0; z-index: 1000;
-  display: flex; align-items: center; justify-content: center;
-}
-.modal[hidden] { display: none; }
-.modal__overlay {
-  position: absolute; inset: 0;
-  background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
-}
-.modal__content {
-  position: relative; z-index: 1;
-  width: 90%; max-width: 580px; max-height: 85vh;
-  background: var(--bg-surface); border: 1px solid var(--border-med);
-  border-radius: var(--r-lg); box-shadow: var(--shadow-lg);
-  display: flex; flex-direction: column; overflow: hidden;
-  animation: modal-in .3s var(--ease-spring) both;
-}
-@keyframes modal-in { from { opacity: 0; transform: scale(.95) translateY(10px); } to { opacity: 1; transform: none; } }
-.modal__close {
-  position: absolute; top: 12px; right: 16px;
-  background: transparent; border: none; font-size: 24px;
-  color: var(--text-secondary); cursor: pointer; line-height: 1;
-}
-.modal__close:hover { color: var(--text-primary); }
-.modal__title {
-  padding: 18px 24px; font-family: var(--font-display);
-  font-size: 1.15rem; font-weight: 800; border-bottom: 1px solid var(--border-soft);
-  color: var(--text-primary);
-}
-.modal__body { padding: 24px; overflow-y: auto; font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; }
-
-/* Diagnostic report layouts */
-.report-section { margin-bottom: 22px; }
-.report-section__title { font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.03em; }
-.report-section__title--success { color: var(--accent-teal); }
-.report-section__title--warning { color: var(--accent-coral); }
-.report-section__title--info { color: var(--accent-blue); }
-.report-list { list-style: none; padding-left: 0; }
-.report-list li { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; color: var(--text-secondary); }
-.report-list li::before { content: "•"; color: var(--text-tertiary); font-weight: bold; }
-.report-badge-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.report-preview {
-  background: var(--bg-subtle); border: 1px solid var(--border-soft);
-  border-radius: var(--r-sm); padding: 12px; font-family: var(--font-mono);
-  font-size: 11.5px; color: var(--text-secondary); white-space: pre-wrap;
-  max-height: 120px; overflow-y: auto; margin-top: 8px;
 }

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online Exam</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    *{ margin:0; padding:0; box-sizing:border-box; }
+    body{ font-family:Arial,sans-serif; background:#f3f6fb; color:#111827; min-height:100vh; padding:2rem; }
+    .container{ max-width:1000px; margin:auto; }
+    .card{ background:white; border-radius:20px; padding:2rem; margin-bottom:1.5rem; box-shadow:0 5px 20px rgba(0,0,0,.08); }
+    .title{ font-size:2rem; font-weight:800; margin-bottom:1rem; }
+    .input{ width:100%; padding:1rem; border-radius:14px; border:1px solid #d1d5db; margin-top:1rem; font-size:15px; }
+    .btn{ padding:1rem 1.5rem; border:none; border-radius:14px; background:#2563eb; color:white; font-weight:700; cursor:pointer; margin-top:1rem; }
+    .btn:hover{ opacity:.9; }
+    .question{ margin-bottom:2rem; }
+    .question h3{ margin-bottom:1rem; }
+    .option{ display:flex; gap:.8rem; padding:1rem; background:#f9fafb; border-radius:14px; margin-bottom:.7rem; cursor:pointer; }
+    .option:hover{ background:#dbeafe; }
+    textarea{ width:100%; min-height:120px; border-radius:14px; border:1px solid #d1d5db; padding:1rem; resize:vertical; }
+    .hidden{ display:none; }
+    .timer{ position:fixed; top:20px; right:20px; background:#2563eb; color:white; padding:1rem 1.5rem; border-radius:16px; font-weight:800; box-shadow:0 5px 15px rgba(0,0,0,.15); }
+    .score{ font-size:5rem; font-weight:900; color:#2563eb; margin:1rem 0; }
+    .correct{ background:#dcfce7; border-radius:14px; padding:1rem; margin-bottom:1rem; }
+    .wrong{ background:#fee2e2; border-radius:14px; padding:1rem; margin-bottom:1rem; }
+  </style>
+</head>
+<body>
+
+  <div class="timer hidden" id="timer">00:00</div>
+
+  <div class="container">
+
+    <!-- START SCREEN -->
+    <div class="card" id="startScreen">
+      <h1 class="title">Online Exam</h1>
+      <p id="examInfo"></p>
+      <input type="text" id="studentName" class="input" placeholder="Enter Your Name" />
+      <button class="btn" onclick="startExam()">Start Exam</button>
+    </div>
+
+    <!-- EXAM SCREEN -->
+    <div id="examScreen" class="hidden">
+      <div class="card">
+        <h1 class="title" id="examTitle"></h1>
+        <p id="examInstructions"></p>
+      </div>
+      <div id="questionsContainer"></div>
+      <button class="btn" onclick="submitExam()">Submit Exam</button>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="resultScreen" class="hidden">
+      <div class="card">
+        <h1>Final Result</h1>
+        <div class="score" id="scoreText">0%</div>
+        <p id="resultSummary"></p>
+        <a href="index.html" style="display:inline-block;margin-top:1rem;padding:.75rem 1.5rem;background:#f3f4f6;border-radius:12px;font-weight:700;color:#374151;text-decoration:none;">← Back to Dashboard</a>
+      </div>
+      <div id="answerReview"></div>
+    </div>
+
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    let exam = null;
+    let questions = [];
+    let answers = {};
+    let timerInterval;
+    let startTime = null;
+
+    // ── LOAD EXAM ────────────────────────────────
+    const params  = new URLSearchParams(window.location.search);
+    const examId  = params.get('id');
+    exam = DB.getExamById(examId);
+
+    if (!exam) {
+      alert('Exam Not Found');
+    } else {
+      questions = DB.getQuestions().filter(q => String(q.subjectId) === String(exam.subjectId));
+      document.getElementById('examInfo').innerText =
+        exam.title + ' · ' + questions.length + ' Questions | ' + exam.duration + ' Minutes';
+    }
+
+    // ── START EXAM ───────────────────────────────
+    function startExam() {
+      const name = document.getElementById('studentName').value.trim();
+      if (!name) { alert('Please enter your name'); return; }
+
+      startTime = new Date().toISOString();
+
+      document.getElementById('startScreen').classList.add('hidden');
+      document.getElementById('examScreen').classList.remove('hidden');
+      document.getElementById('timer').classList.remove('hidden');
+      document.getElementById('examTitle').innerText = exam.title;
+      document.getElementById('examInstructions').innerText = exam.instructions || 'Answer all questions.';
+
+      renderQuestions();
+      startTimer(exam.duration || 30);
+    }
+
+    // ── RENDER QUESTIONS ─────────────────────────
+    function renderQuestions() {
+      const container = document.getElementById('questionsContainer');
+      container.innerHTML = '';
+
+      questions.forEach((question, index) => {
+        const div = document.createElement('div');
+        div.className = 'card question';
+
+        div.innerHTML = `
+          <h3>Q${index + 1}. ${question.text}</h3>
+          ${question.section === 'A'
+            ? question.options.map((option, optionIndex) => `
+                <label class="option">
+                  <input type="radio" name="${question.id}"
+                    onchange="saveAnswer('${question.id}', '${optionIndex}')" />
+                  <span>${option}</span>
+                </label>`).join('')
+            : `<textarea placeholder="Write your answer here..."
+                oninput="saveAnswer('${question.id}', this.value)"></textarea>`
+          }`;
+
+        container.appendChild(div);
+      });
+    }
+
+    // ── SAVE ANSWER ──────────────────────────────
+    function saveAnswer(questionId, value) {
+      answers[questionId] = value;
+    }
+
+    // ── TIMER ────────────────────────────────────
+    function startTimer(minutes) {
+      let seconds = minutes * 60;
+      updateTimer(seconds);
+      timerInterval = setInterval(() => {
+        seconds--;
+        updateTimer(seconds);
+        if (seconds <= 0) { clearInterval(timerInterval); submitExam(); }
+      }, 1000);
+    }
+
+    function updateTimer(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      document.getElementById('timer').innerText =
+        String(mins).padStart(2,'0') + ':' + String(secs).padStart(2,'0');
+    }
+
+    // ── SUBMIT EXAM ──────────────────────────────
+    function submitExam() {
+      clearInterval(timerInterval);
+
+      let correct = 0, wrong = 0, totalMarks = 0, earnedMarks = 0;
+
+      questions.forEach(question => {
+        totalMarks += (question.marks || 1);
+        if (question.section === 'A') {
+          const userAnswer = parseInt(answers[question.id]);
+          if (userAnswer === question.correct) {
+            correct++;
+            earnedMarks += (question.marks || 1);
+          } else {
+            wrong++;
+          }
+        }
+      });
+
+      const score = totalMarks > 0 ? Math.round((earnedMarks / totalMarks) * 100) : 0;
+
+      // ── Save result with timestamp ─────────────
+      DB.saveResult({
+        examId:          exam.id,
+        studentName:     document.getElementById('studentName').value,
+        score,
+        correctAnswers:  correct,
+        wrongAnswers:    wrong,
+        totalMarks,
+        earnedMarks,
+        answers,
+        submittedAt:     new Date().toISOString()   // ← used in dashboard scores table
+      });
+
+      document.getElementById('examScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.remove('hidden');
+      document.getElementById('timer').classList.add('hidden');
+      document.getElementById('scoreText').innerText = score + '%';
+      document.getElementById('resultSummary').innerText =
+        `Correct: ${correct} | Wrong: ${wrong} | Marks: ${earnedMarks}/${totalMarks}`;
+
+      renderAnswerReview();
+    }
+
+    // ── ANSWER REVIEW ────────────────────────────
+    function renderAnswerReview() {
+      const container = document.getElementById('answerReview');
+      container.innerHTML = '';
+
+      questions.forEach((question, index) => {
+        const userAnswer = answers[question.id];
+        let isCorrect = false;
+        if (question.section === 'A') {
+          isCorrect = parseInt(userAnswer) === question.correct;
+        }
+
+        const div = document.createElement('div');
+        div.className = isCorrect ? 'correct' : 'wrong';
+
+        div.innerHTML = `
+          <h3>Q${index + 1}. ${question.text}</h3>
+          ${question.section === 'A'
+            ? `<p>Your Answer: ${userAnswer !== undefined ? question.options[userAnswer] : 'Not Answered'}</p>
+               <p>Correct Answer: ${question.options[question.correct]}</p>`
+            : `<p>Written Answer: ${userAnswer || 'No Answer'}</p>`
+          }`;
+
+        container.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
