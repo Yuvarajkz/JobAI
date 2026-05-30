@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account — JobPrep AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="bg-orb bg-orb--1"></div>
+    <div class="bg-orb bg-orb--2"></div>
+    <div class="bg-grid"></div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="auth-nav">
+    <a class="auth-nav__brand" href="index.html" aria-label="JobPrep AI home">
+      <div class="brand-logo" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 26 26" fill="none">
+          <rect x="1" y="1" width="11" height="11" rx="3" fill="currentColor"/>
+          <rect x="14" y="1" width="11" height="11" rx="3" fill="currentColor" opacity="0.45"/>
+          <rect x="1" y="14" width="11" height="11" rx="3" fill="currentColor" opacity="0.45"/>
+          <rect x="14" y="14" width="11" height="11" rx="3" fill="currentColor" opacity="0.18"/>
+        </svg>
+      </div>
+      <span class="brand-name">JobPrep<em>AI</em></span>
+    </a>
+    <button id="toggleMode" class="theme-toggle" aria-label="Toggle colour theme">
+      <span class="theme-toggle__track">
+        <span class="theme-toggle__thumb">
+          <svg class="icon-sun" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M6 1v1M6 10v1M1 6h1M10 6h1M2.64 2.64l.71.71M8.65 8.65l.71.71M8.65 2.64l-.71.71M3.64 8.65l-.71.71" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <svg class="icon-moon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M10.5 7.5A4.5 4.5 0 014.5 1.5a4.5 4.5 0 100 9 4.5 4.5 0 006-3z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        </span>
+      </span>
+    </button>
+  </nav>
+
+  <main class="auth-layout" role="main">
+
+    <!-- Left panel — decorative (mirrored variant) -->
+    <aside class="auth-panel auth-panel--signup" aria-hidden="true">
+      <div class="panel-content">
+        <div class="panel-badge">
+          <span class="panel-badge__dot"></span>
+          Free to get started
+        </div>
+        <h2 class="panel-headline">Unlock your<br><em>potential</em><br>today.</h2>
+        <p class="panel-sub">Join thousands of candidates who prep smarter, interview better, and land offers faster with AI coaching.</p>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step__num">01</div>
+            <div>
+              <p class="step__title">Upload your resume</p>
+              <p class="step__desc">Get instant ATS analysis and keyword scoring.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step__num">02</div>
+            <div>
+              <p class="step__title">Practice with AI</p>
+              <p class="step__desc">Real-time feedback from your own personal interviewer.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step__num">03</div>
+            <div>
+              <p class="step__title">Track your growth</p>
+              <p class="step__desc">Watch your skill bars climb session by session.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-trust">
+          <div class="trust-avatars" aria-hidden="true">
+            <div class="trust-av" style="background:linear-gradient(135deg,#2563eb,#7c3aed)">A</div>
+            <div class="trust-av" style="background:linear-gradient(135deg,#0d9488,#2563eb)">M</div>
+            <div class="trust-av" style="background:linear-gradient(135deg,#d97706,#ea580c)">P</div>
+            <div class="trust-av" style="background:linear-gradient(135deg,#7c3aed,#ea580c)">R</div>
+            <div class="trust-av trust-av--count">+2k</div>
+          </div>
+          <p class="trust-label">2,000+ candidates prep here every month</p>
+        </div>
+
+        <div class="float-card float-card--1">
+          <div class="float-card__icon">🚀</div>
+          <div>
+            <p class="float-card__label">Interview Readiness</p>
+            <div class="float-bar"><div class="float-bar__fill" style="width:91%"></div></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right panel — form -->
+    <section class="auth-form-wrap" aria-labelledby="signup-heading">
+      <div class="auth-form-card">
+
+        <div class="form-header">
+          <h1 class="form-title" id="signup-heading">Create your account</h1>
+          <p class="form-subtitle">Free forever. No credit card needed.</p>
+        </div>
+
+        <!-- Social buttons -->
+        <div class="social-btns">
+          <button class="social-btn" type="button" id="googleSignupBtn" aria-label="Continue with Google">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+            Sign up with Google
+          </button>
+          <button class="social-btn" type="button" id="githubSignupBtn" aria-label="Continue with GitHub">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            Sign up with GitHub
+          </button>
+        </div>
+
+        <div class="divider" role="separator"><span>or create with email</span></div>
+
+        <!-- Signup form -->
+        <form id="signupForm" novalidate autocomplete="on">
+
+          <div class="field-row-two">
+            <div class="field-group">
+              <label class="field-label" for="firstName">First name</label>
+              <div class="field-wrap">
+                <span class="field-icon" aria-hidden="true">
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                </span>
+                <input class="field-input" type="text" id="firstName" name="firstName" placeholder="Alex" autocomplete="given-name" required aria-describedby="firstNameErr">
+              </div>
+              <span class="field-error" id="firstNameErr" role="alert" aria-live="polite"></span>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="lastName">Last name</label>
+              <div class="field-wrap">
+                <span class="field-icon" aria-hidden="true">
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                </span>
+                <input class="field-input" type="text" id="lastName" name="lastName" placeholder="Morgan" autocomplete="family-name" required aria-describedby="lastNameErr">
+              </div>
+              <span class="field-error" id="lastNameErr" role="alert" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="signupEmail">Email address</label>
+            <div class="field-wrap">
+              <span class="field-icon" aria-hidden="true">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 4l6 5 6-5M2 4h12v9a1 1 0 01-1 1H3a1 1 0 01-1-1V4z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+              </span>
+              <input class="field-input" type="email" id="signupEmail" name="email" placeholder="you@company.com" autocomplete="email" required aria-describedby="signupEmailErr">
+            </div>
+            <span class="field-error" id="signupEmailErr" role="alert" aria-live="polite"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="signupPassword">Password</label>
+            <div class="field-wrap">
+              <span class="field-icon" aria-hidden="true">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="7" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 7V5a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="11" r="1" fill="currentColor"/></svg>
+              </span>
+              <input class="field-input" type="password" id="signupPassword" name="password" placeholder="Min. 8 characters" autocomplete="new-password" required aria-describedby="signupPassErr passwordStrength">
+              <button type="button" class="show-pass" id="showSignupPass" aria-label="Toggle password visibility">
+                <svg class="eye-open" width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+                <svg class="eye-shut" width="15" height="15" viewBox="0 0 16 16" fill="none" style="display:none"><path d="M2 2l12 12M6.5 6.6A2 2 0 0010 10M1 8s.8-1.6 2.5-2.8M5.5 4.3C6.3 4 7.1 3.7 8 3.7c4.5 0 7 4.3 7 4.3s-.7 1.4-2 2.5M11 11.5C10.2 12 9.2 12.3 8 12.3c-4.5 0-7-4.3-7-4.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+            <!-- Strength meter -->
+            <div class="strength-meter" id="passwordStrength" aria-label="Password strength" role="status">
+              <div class="strength-bars">
+                <div class="strength-bar" id="sBar1"></div>
+                <div class="strength-bar" id="sBar2"></div>
+                <div class="strength-bar" id="sBar3"></div>
+                <div class="strength-bar" id="sBar4"></div>
+              </div>
+              <span class="strength-label" id="strengthLabel"></span>
+            </div>
+            <span class="field-error" id="signupPassErr" role="alert" aria-live="polite"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="confirmPassword">Confirm password</label>
+            <div class="field-wrap">
+              <span class="field-icon" aria-hidden="true">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="7" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 7V5a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="11" r="1" fill="currentColor"/></svg>
+              </span>
+              <input class="field-input" type="password" id="confirmPassword" name="confirmPassword" placeholder="Repeat your password" autocomplete="new-password" required aria-describedby="confirmPassErr">
+            </div>
+            <span class="field-error" id="confirmPassErr" role="alert" aria-live="polite"></span>
+          </div>
+
+          <div class="field-row">
+            <label class="check-label">
+              <input type="checkbox" class="check-input" id="agreeTerms" name="terms" required>
+              <span class="check-box" aria-hidden="true"></span>
+              <span class="check-text">I agree to the <a href="#" class="inline-link">Terms of Service</a> and <a href="#" class="inline-link">Privacy Policy</a></span>
+            </label>
+          </div>
+
+          <button class="submit-btn" type="submit" id="signupSubmit">
+            <span class="submit-btn__text">Create free account</span>
+            <span class="submit-btn__spinner" aria-hidden="true"></span>
+          </button>
+
+          <p class="form-switch">
+            Already have an account?
+            <a href="login.html" class="form-switch__link">Sign in →</a>
+          </p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Firebase SDK Compat -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <script src="auth.js"></script>
+</body>
+</html>
